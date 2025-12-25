@@ -44,7 +44,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     compileOnly("com.google.android.gms:play-services-ads:23.6.0")
-    implementation("com.github.ravirising26:TapMindSdk:1.0.0")
+    implementation("com.github.ravirising26:TapMindSdk:1.0.1")
 }
 
 afterEvaluate {
