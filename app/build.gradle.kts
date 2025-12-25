@@ -1,3 +1,7 @@
+import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
+import org.gradle.internal.impldep.com.amazonaws.util.XpathUtils.asNode
+import groovy.util.Node
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -44,18 +48,27 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     compileOnly("com.google.android.gms:play-services-ads:23.6.0")
-    implementation("com.github.ravirising26:TapMindSdk:1.0.2")
+    implementation("com.github.ravirising26:TapMindSdk:1.0.3")
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            afterEvaluate {
                 from(components["release"])
+            }
 
-                groupId = "com.github.ravirising26"
-                artifactId = "CustomAdapter-admob"
-                version = "1.0.0"
+            groupId = "com.github.ravirising26"
+            artifactId = "CustomAdapter-admob"
+            version = "1.0.0"
+
+            pom.withXml {
+                val root = asNode()
+                val depsNode = root.children()
+                    .filterIsInstance<Node>()
+                    .firstOrNull { it.name() == "dependencies" }
+
+                depsNode?.let { root.remove(it) }
             }
         }
     }
